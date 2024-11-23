@@ -4,6 +4,7 @@ import { Container, Card, Form, InputGroup, Button,
 import { Search, TrendingUp, History, ExternalLink } from 'lucide-react';
 
 const CryptoTracker = () => {
+  const cryptoAPI = process.env.REACT_APP_COINCAP_CRYPTO_URL;
   const [cryptos, setCryptos] = useState([]);
   const [filteredCryptos, setFilteredCryptos] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,7 +26,7 @@ const CryptoTracker = () => {
   useEffect(() => {
     const fetchCryptos = async () => {
       try {
-        const response = await fetch('https://api.coincap.io/v2/assets?limit=50');
+        const response = await fetch(`${cryptoAPI}`);
         const data = await response.json();
         setCryptos(data.data);
         setFilteredCryptos(data.data);
