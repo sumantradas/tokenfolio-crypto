@@ -2,8 +2,9 @@ import React, { useEffect, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Card, Spinner, Button } from 'react-bootstrap';
 import { TrendingUp } from 'lucide-react';
-import { fetchCryptos } from '../store/cryptoSlice';
+import { fetchCryptos, fetchExchangeRates } from '../store/cryptoSlice';
 import SearchBarWithHistory from './SearchBarWithHistory';
+import { isEmptyObject } from '../utils/isEmptyObject';
 
 // const SearchBar = lazy(() => import('./SearchBar'));
 const CryptoList = lazy(() => import('./CryptoList'));
@@ -11,7 +12,7 @@ const CryptoList = lazy(() => import('./CryptoList'));
 
 
 const CryptoTracker = () => {
-const { cryptos, status, lastFetched } = useSelector(state => state.crypto);
+const { cryptos, status, lastFetched, exchangeRates } = useSelector(state => state.crypto);
 
   const dispatch = useDispatch();
 
@@ -25,6 +26,17 @@ const { cryptos, status, lastFetched } = useSelector(state => state.crypto);
       dispatch(fetchCryptos());
     }
   }, [dispatch, cryptos.length, status, lastFetched]);
+
+
+  useEffect(() => {
+
+    if (isEmptyObject(exchangeRates)) {
+      dispatch(fetchExchangeRates());
+    }
+
+  }, [dispatch, exchangeRates]);
+
+  
 
 
   function fetchDataCryptos() {

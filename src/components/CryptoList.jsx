@@ -8,7 +8,7 @@ import { formatPrice } from '../utils/formatters';
 const CryptoList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, filteredCryptos, selectedCurrency } = useSelector(state => state.crypto);
+  const { loading, filteredCryptos, selectedCurrency, exchangeRates } = useSelector(state => state.crypto);
 
   const handleCryptoSelect = (crypto) => {
     dispatch(setSelectedCrypto(crypto));
@@ -39,7 +39,7 @@ const CryptoList = () => {
         <span>{crypto.name}</span>
       </div>
       <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-start md:items-center mt-2 md:mt-0">
-        <span>{formatPrice(parseFloat(crypto.priceUsd), selectedCurrency)}</span>
+        <span>{formatPrice(parseFloat(crypto.priceUsd), selectedCurrency, exchangeRates)}</span>
         <Badge bg={parseFloat(crypto.changePercent24Hr) >= 0 ? 'success' : 'danger'}>
           {parseFloat(crypto.changePercent24Hr).toFixed(2)}%
         </Badge>

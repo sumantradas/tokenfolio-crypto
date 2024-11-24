@@ -9,6 +9,15 @@ export const fetchCryptos = createAsyncThunk(
   }
 );
 
+export const fetchExchangeRates = createAsyncThunk(
+  'crypto/fetchExchangeRates',
+  async () => {
+    const response = await fetch('/data/exchangeRates.json');
+    const data = await response.json();
+    return data;
+  }
+);
+
 const cryptoSlice = createSlice({
   name: 'crypto',
   initialState: {
@@ -21,13 +30,7 @@ const cryptoSlice = createSlice({
     loading: false,
     error: null,
     lastFetched: null,
-    exchangeRates: {
-      USD: 1,
-      EUR: 0.91,
-      GBP: 0.79,
-      CHF: 0.89,
-      INR: 83.25,
-    },
+    exchangeRates: {},
   },
   reducers: {
     setSearchTerm: (state, action) => {
@@ -69,7 +72,15 @@ const cryptoSlice = createSlice({
       .addCase(fetchCryptos.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      })
+
+      .addCase(fetchExchangeRates.fulfilled, (state, action) => {
+        state.exchangeRates = action.payload; // Update exchangeRates dynamically
+      })
+      .addCase(fetchExchangeRates.rejected, (state, action) => {
+        state.error = action.error.message;
       });
+      
   },
 });
 

@@ -10,7 +10,7 @@ const CryptoDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { selectedCrypto, cryptos, selectedCurrency } = useSelector(state => state.crypto);
+  const { selectedCrypto, cryptos, selectedCurrency, exchangeRates } = useSelector(state => state.crypto);
 
   useEffect(() => {
     if (!selectedCrypto && cryptos.length === 0) {
@@ -58,7 +58,7 @@ const CryptoDetails = () => {
             <div className="flex-1 min-w-[200px] p-4 bg-gray-50 rounded-md">
               <h6>Price</h6>
               <p className="h4 mb-0">
-                {formatPrice(parseFloat(crypto.priceUsd), selectedCurrency)}
+                {formatPrice(parseFloat(crypto.priceUsd), selectedCurrency, exchangeRates)}
               </p>
             </div>
             <div className="flex-1 min-w-[200px] p-4 bg-gray-50 rounded-md">
@@ -74,7 +74,7 @@ const CryptoDetails = () => {
             <div className="flex-1 min-w-[200px] p-4 bg-gray-50 rounded-md">
               <h6>Market Cap</h6>
               <p className="h4 mb-0">
-                {formatPrice(parseFloat(crypto.marketCapUsd), selectedCurrency)}
+                {formatPrice(parseFloat(crypto.marketCapUsd), selectedCurrency, exchangeRates)}
               </p>
             </div>
           </div>
