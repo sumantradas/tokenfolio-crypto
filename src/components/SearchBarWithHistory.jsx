@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { Form, InputGroup, ListGroup, Badge } from 'react-bootstrap';
 import { Search, History, X } from 'lucide-react';
 import { setSearchTerm, setSelectedCurrency, setSelectedCrypto, removeFromSearchHistory } from '../store/cryptoSlice';
+import CurrencySelector from './CurrencySelector'; 
+import { currencies } from '../constants/currencies';
 
 const SearchBarWithHistory = () => {
   const navigate = useNavigate();
@@ -11,13 +13,6 @@ const SearchBarWithHistory = () => {
   const [isFocused, setIsFocused] = useState(false);
   const { searchTerm, selectedCurrency, searchHistory } = useSelector(state => state.crypto);
 
-  const currencies = {
-    USD: { symbol: '$', name: 'US Dollar' },
-    EUR: { symbol: '€', name: 'Euro' },
-    GBP: { symbol: '£', name: 'British Pound' },
-    CHF: { symbol: 'Fr', name: 'Swiss Franc' },
-    INR: { symbol: '₹', name: 'Indian Rupee' },
-  };
 
   const handleSearchChange = (e) => {
     dispatch(setSearchTerm(e.target.value));
@@ -100,17 +95,12 @@ const SearchBarWithHistory = () => {
           )}
         </div>
 
-        <Form.Select
-          className="w-[200px]"
-          value={selectedCurrency}
-          onChange={handleCurrencyChange}
-        >
-          {Object.entries(currencies).map(([code, { name }]) => (
-            <option key={code} value={code}>
-              {code} - {name}
-            </option>
-          ))}
-        </Form.Select>
+        {/* Use the CurrencySelector component */}
+        <CurrencySelector
+          selectedCurrency={selectedCurrency}
+          currencies={currencies}
+          handleCurrencyChange={handleCurrencyChange}
+        />
       </div>
     </div>
   );

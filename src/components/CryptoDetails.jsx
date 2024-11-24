@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Card, Container, Button } from 'react-bootstrap';
 import { ArrowLeft, ExternalLink } from 'lucide-react';
 import { formatPrice } from '../utils/formatters';
-import { fetchCryptos } from '../store/cryptoSlice';
+import { fetchCryptos, fetchExchangeRates } from '../store/cryptoSlice';
+import { isEmptyObject } from '../utils/isEmptyObject';
 
 const CryptoDetails = () => {
   const { id } = useParams();
@@ -17,6 +18,14 @@ const CryptoDetails = () => {
       dispatch(fetchCryptos());
     }
   }, [dispatch, selectedCrypto, cryptos]);
+
+  useEffect(() => {
+
+    if (isEmptyObject(exchangeRates)) {
+      dispatch(fetchExchangeRates());
+    }
+
+  }, [dispatch, exchangeRates]);
 
   const crypto = selectedCrypto || cryptos.find(c => c.id === id);
 
