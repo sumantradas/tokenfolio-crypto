@@ -26,27 +26,28 @@ const CryptoList = () => {
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      {filteredCryptos.map(crypto => (
-        <div
-          key={crypto.id}
-          className="flex justify-between items-center p-4 bg-gray-50 rounded-md cursor-pointer hover:bg-gray-100 transition-colors"
-          onClick={() => handleCryptoSelect(crypto)}
-        >
-          <div className="flex gap-4 items-center">
-            <span className="font-bold">#{crypto.rank}</span>
-            <span className="font-bold">{crypto.symbol}</span>
-            <span>{crypto.name}</span>
-          </div>
-          <div className="flex gap-4 items-center">
-            <span>{formatPrice(parseFloat(crypto.priceUsd), selectedCurrency)}</span>
-            <Badge bg={parseFloat(crypto.changePercent24Hr) >= 0 ? 'success' : 'danger'}>
-              {parseFloat(crypto.changePercent24Hr).toFixed(2)}%
-            </Badge>
-          </div>
-        </div>
-      ))}
+<div className="flex flex-col gap-2">
+  {filteredCryptos.map(crypto => (
+    <div
+      key={crypto.id}
+      className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 bg-gray-50 rounded-md cursor-pointer hover:bg-gray-100 transition-colors"
+      onClick={() => handleCryptoSelect(crypto)}
+    >
+      <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-start md:items-center">
+        <span className="font-bold">#{crypto.rank}</span>
+        <span className="font-bold">{crypto.symbol}</span>
+        <span>{crypto.name}</span>
+      </div>
+      <div className="flex flex-col md:flex-row gap-2 md:gap-4 items-start md:items-center mt-2 md:mt-0">
+        <span>{formatPrice(parseFloat(crypto.priceUsd), selectedCurrency)}</span>
+        <Badge bg={parseFloat(crypto.changePercent24Hr) >= 0 ? 'success' : 'danger'}>
+          {parseFloat(crypto.changePercent24Hr).toFixed(2)}%
+        </Badge>
+      </div>
     </div>
+  ))}
+</div>
+
   );
 };
 

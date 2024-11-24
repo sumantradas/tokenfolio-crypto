@@ -20,6 +20,7 @@ const cryptoSlice = createSlice({
     searchHistory: [],
     loading: false,
     error: null,
+    lastFetched: null,
     exchangeRates: {
       USD: 1,
       EUR: 0.91,
@@ -63,6 +64,7 @@ const cryptoSlice = createSlice({
         state.loading = false;
         state.cryptos = action.payload;
         state.filteredCryptos = action.payload;
+        state.lastFetched = Date.now();
       })
       .addCase(fetchCryptos.rejected, (state, action) => {
         state.loading = false;
