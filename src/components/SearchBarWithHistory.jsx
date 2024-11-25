@@ -1,26 +1,23 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Form, InputGroup, ListGroup, Badge } from 'react-bootstrap';
+import { Form, InputGroup, Badge } from 'react-bootstrap';
 import { Search, History, X } from 'lucide-react';
-import { setSearchTerm, setSelectedCurrency, setSelectedCrypto, removeFromSearchHistory } from '../store/cryptoSlice';
+import { setSearchTerm, setSelectedCrypto, removeFromSearchHistory } from '../store/cryptoSlice';
 import CurrencySelector from './CurrencySelector'; 
-import { currencies } from '../constants/currencies';
 
 const SearchBarWithHistory = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isFocused, setIsFocused] = useState(false);
-  const { searchTerm, selectedCurrency, searchHistory } = useSelector(state => state.crypto);
+  const { searchTerm, searchHistory } = useSelector(state => state.crypto);
 
 
   const handleSearchChange = (e) => {
     dispatch(setSearchTerm(e.target.value));
   };
 
-  const handleCurrencyChange = (e) => {
-    dispatch(setSelectedCurrency(e.target.value));
-  };
+
 
   const handleCryptoSelect = (crypto) => {
     dispatch(setSelectedCrypto(crypto));
@@ -96,11 +93,7 @@ const SearchBarWithHistory = () => {
         </div>
 
         {/* Use the CurrencySelector component */}
-        <CurrencySelector
-          selectedCurrency={selectedCurrency}
-          currencies={currencies}
-          handleCurrencyChange={handleCurrencyChange}
-        />
+        <CurrencySelector/>
       </div>
     </div>
   );

@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchWithRetry } from '../utils/fetchWithRetry';
 
 export const fetchCryptos = createAsyncThunk(
   'crypto/fetchCryptos',
   async () => {
-    const response = await fetch(process.env.REACT_APP_COINCAP_CRYPTO_URL);
+    const response = await fetchWithRetry(process.env.REACT_APP_COINCAP_CRYPTO_URL);
     const data = await response.json();
     return data.data;
   }
@@ -28,7 +29,8 @@ const cryptoSlice = createSlice({
     selectedCurrency: 'USD',
     searchHistory: [],
     loading: false,
-    error: null,
+    cryptoError: null,
+    exchangeRateError: null,
     lastFetched: null,
     exchangeRates: {},
   },
@@ -57,6 +59,12 @@ const cryptoSlice = createSlice({
           crypto => crypto.id !== action.payload
         );
       },
+      clearcryptoError: (state) => {
+        state.cryptoError = null;
+      },
+      clearExchangerateError: (state) => {
+        state.exchangeRateError = null;
+      },
   },
   extraReducers: (builder) => {
     builder
@@ -65,24 +73,25 @@ const cryptoSlice = createSlice({
       })
       .addCase(fetchCryptos.fulfilled, (state, action) => {
         state.loading = false;
+        state.cryptoError = null;
         state.cryptos = action.payload;
         state.filteredCryptos = action.payload;
         state.lastFetched = Date.now();
       })
       .addCase(fetchCryptos.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.cryptoError = action.error.message;
       })
 
       .addCase(fetchExchangeRates.fulfilled, (state, action) => {
         state.exchangeRates = action.payload; // Update exchangeRates dynamically
       })
       .addCase(fetchExchangeRates.rejected, (state, action) => {
-        state.error = action.error.message;
+        state.exchangeRateError = action.error.message;
       });
       
   },
 });
 
-export const { setSearchTerm, setSelectedCurrency, setSelectedCrypto , removeFromSearchHistory} = cryptoSlice.actions;
+export const { setSearchTerm, setSelectedCurrency, setSelectedCrypto , removeFromSearchHistory, clearcryptoError,clearExchangerateError } = cryptoSlice.actions;
 export default cryptoSlice.reducer;

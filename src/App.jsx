@@ -1,21 +1,15 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { store } from './store/store';
-import CryptoTracker from './components/CryptoTracker';
-import CryptoDetails from './components/CryptoDetails';
+import AppRoutes from './routes.jsx';
 
-const App = () => {
-  return (
-    <Provider store={store}>
-      <Router>
-        <Routes>
-          <Route path="/" element={<CryptoTracker />} />
-          <Route path="/crypto/:id" element={<CryptoDetails />} />
-        </Routes>
-      </Router>
-    </Provider>
-  );
-};
+const App = () => (
+  <Provider store={store}>
+    <Router>
+      <AppRoutes />
+    </Router>
+  </Provider>
+);
 
 export default App;
