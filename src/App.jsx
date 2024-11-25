@@ -6,7 +6,7 @@ import AppRoutes from './routes.jsx';
 
 const App = () => (
   <Provider store={store}>
-    <Router>
+    <Router basename="/tokenfolio-crypto">
       <AppRoutes />
     </Router>
   </Provider>
