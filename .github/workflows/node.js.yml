@@ -1,0 +1,33 @@
+name: React Crypto App CI/CD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        
+    - name: Install Dependencies
+      run: npm ci
+      
+    - name: Build Application
+      env:
+        REACT_APP_COINCAP_CRYPTO_URL: ${{ secrets.REACT_APP_COINCAP_CRYPTO_URL }}
+      run: npm run build
+      
+    - name: Deploy to GitHub Pages
+      run: |
+        git config --global user.name 'GitHub Actions Bot'
+        git config --global user.email 'deploy@github.com'
+        npx gh-pages -d build
