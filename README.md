@@ -8,7 +8,6 @@ In the project directory, you can run:
 
 ### `npm run start:prod`
 
-Runs the app in the development mode.\
 Open http://localhost:3000/tokenfolio-crypto to view it in your browser.
 
 Initial Deployment URL you can find here : https://sumantradas.github.io/tokenfolio-crypto/
