@@ -1,18 +1,16 @@
 import React, { useEffect, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Card, Spinner, Button } from 'react-bootstrap';
+import { Container, Card, Spinner, Button, Alert } from 'react-bootstrap';
 import { TrendingUp } from 'lucide-react';
-import { fetchCryptos, fetchExchangeRates } from '../store/cryptoSlice';
+import { fetchCryptos, fetchExchangeRates, clearErrors } from '../store/cryptoSlice';
 import SearchBarWithHistory from './SearchBarWithHistory';
 import { isEmptyObject } from '../utils/isEmptyObject';
 
-// const SearchBar = lazy(() => import('./SearchBar'));
 const CryptoList = lazy(() => import('./CryptoList'));
-// const SearchHistory = lazy(() => import('./SearchHistory'));
 
 
 const CryptoTracker = () => {
-const { cryptos, status, lastFetched, exchangeRates } = useSelector(state => state.crypto);
+  const { cryptos, status, lastFetched, exchangeRates, errors} = useSelector(state => state.crypto);
 
   const dispatch = useDispatch();
 
@@ -23,43 +21,39 @@ const { cryptos, status, lastFetched, exchangeRates } = useSelector(state => sta
       (lastFetched && Date.now() - lastFetched > REFRESH_INTERVAL);
 
     if (shouldRefetch && status !== 'loading') {
+      dispatch(clearErrors());
       dispatch(fetchCryptos());
     }
   }, [dispatch, cryptos.length, status, lastFetched]);
 
-
   useEffect(() => {
-
     if (isEmptyObject(exchangeRates)) {
       dispatch(fetchExchangeRates());
     }
-
   }, [dispatch, exchangeRates]);
 
-  
-
-
   function fetchDataCryptos() {
+    dispatch(clearErrors()); // Clear any previous errors
     dispatch(fetchCryptos());
   }
 
+  const renderErrorMessage = () => {
 
-
-  // if polling is necessary 
-
-//   useEffect(() => {
-//     const POLLING_INTERVAL = 30 * 1000; // 30 seconds
+    if (errors.crypto || errors.exchangeRate) {
+      return (
+        <div className="mb-3">
+          {errors.crypto  && typeof errors.crypto === 'string' &&(
+            <Alert variant="danger">Error fetching cryptocurrencies: {errors.crypto}</Alert>
+          )}
+          {errors.exchangeRate && typeof errors.exchangeRate === 'string' && (
+            <Alert variant="danger">Error fetching exchange rates: {errors.exchangeRate}</Alert>
+          )}
+        </div>
+      );
+    }
+    return null;
+  };
   
-//     const intervalId = setInterval(() => {
-//       // Ensure the API is called every 30 seconds
-//       if (status !== 'loading') {
-//         dispatch(fetchCryptos());
-//       }
-//     }, POLLING_INTERVAL);
-  
-//     // Clean up the interval on component unmount
-//     return () => clearInterval(intervalId);
-//   }, [dispatch, status]);
 
   return (
     <Container className="py-4">
@@ -72,11 +66,10 @@ const { cryptos, status, lastFetched, exchangeRates } = useSelector(state => sta
         </Card.Header>
         <Card.Body>
           <Suspense fallback={<Spinner animation="border" />}>
-            {/* <SearchBar /> */}
-            <SearchBarWithHistory/>
+            {renderErrorMessage()} 
+            <SearchBarWithHistory />
             <Button onClick={fetchDataCryptos}>Refresh Data</Button>
             <CryptoList />
-            {/* <SearchHistory /> */}
           </Suspense>
         </Card.Body>
       </Card>

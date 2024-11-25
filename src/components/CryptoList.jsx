@@ -15,7 +15,7 @@ const CryptoList = () => {
     navigate(`/crypto/${crypto.id}`);
   };
 
-  if (loading) {
+  if (loading.cryptos) {
     return (
       <div className="flex justify-center p-4">
         <Spinner animation="border" role="status">
