@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/tokenfolio-crypto/static/css/main.d2ed7d85.css",
-    "main.js": "/tokenfolio-crypto/static/js/main.0023d134.js",
+    "main.css": "/tokenfolio-crypto/static/css/main.72be795b.css",
+    "main.js": "/tokenfolio-crypto/static/js/main.f8846bf8.js",
     "static/js/200.43f07d2e.chunk.js": "/tokenfolio-crypto/static/js/200.43f07d2e.chunk.js",
     "static/js/845.78d903fe.chunk.js": "/tokenfolio-crypto/static/js/845.78d903fe.chunk.js",
     "index.html": "/tokenfolio-crypto/index.html",
-    "main.d2ed7d85.css.map": "/tokenfolio-crypto/static/css/main.d2ed7d85.css.map",
-    "main.0023d134.js.map": "/tokenfolio-crypto/static/js/main.0023d134.js.map",
+    "main.72be795b.css.map": "/tokenfolio-crypto/static/css/main.72be795b.css.map",
+    "main.f8846bf8.js.map": "/tokenfolio-crypto/static/js/main.f8846bf8.js.map",
     "200.43f07d2e.chunk.js.map": "/tokenfolio-crypto/static/js/200.43f07d2e.chunk.js.map",
     "845.78d903fe.chunk.js.map": "/tokenfolio-crypto/static/js/845.78d903fe.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d2ed7d85.css",
-    "static/js/main.0023d134.js"
+    "static/css/main.72be795b.css",
+    "static/js/main.f8846bf8.js"
   ]
 }
