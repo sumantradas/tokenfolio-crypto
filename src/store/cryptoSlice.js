@@ -66,7 +66,7 @@ export const fetchExchangeRates = createAsyncThunk(
   'crypto/fetchExchangeRates',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await fetch('/data/exchangeRates.json');
+      const response = await fetch(`${process.env.PUBLIC_URL}/data/exchangeRates.json`);
       if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       
       const data = await response.json();
@@ -187,6 +187,13 @@ const cryptoSlice = createSlice({
       .addCase(fetchExchangeRates.rejected, (state, action) => {
         state.loading.exchangeRates = false;
         state.errors.exchangeRate = action.payload || ERROR_MESSAGES.FETCH_FAILED;
+        state.exchangeRates = {
+          "USD": 1,
+          "EUR": 0.91,
+          "GBP": 0.79,
+          "CHF": 0.89,
+          "INR": 83.25
+        }
       });
   },
 });
