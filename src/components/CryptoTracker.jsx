@@ -2,7 +2,7 @@ import React, { useEffect, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Card, Spinner, Button, Alert } from 'react-bootstrap';
 import { TrendingUp } from 'lucide-react';
-import { fetchCryptos, fetchExchangeRates, clearcryptoError } from '../store/cryptoSlice';
+import { fetchCryptos, fetchExchangeRates, clearErrors } from '../store/cryptoSlice';
 import SearchBarWithHistory from './SearchBarWithHistory';
 import { isEmptyObject } from '../utils/isEmptyObject';
 
@@ -10,7 +10,7 @@ const CryptoList = lazy(() => import('./CryptoList'));
 
 
 const CryptoTracker = () => {
-  const { cryptos, status, lastFetched, exchangeRates, cryptoError, exchangeRateError } = useSelector(state => state.crypto);
+  const { cryptos, status, lastFetched, exchangeRates, errors} = useSelector(state => state.crypto);
 
   const dispatch = useDispatch();
 
@@ -21,7 +21,7 @@ const CryptoTracker = () => {
       (lastFetched && Date.now() - lastFetched > REFRESH_INTERVAL);
 
     if (shouldRefetch && status !== 'loading') {
-      dispatch(clearcryptoError());
+      dispatch(clearErrors());
       dispatch(fetchCryptos());
     }
   }, [dispatch, cryptos.length, status, lastFetched]);
@@ -33,21 +33,20 @@ const CryptoTracker = () => {
   }, [dispatch, exchangeRates]);
 
   function fetchDataCryptos() {
-    dispatch(clearcryptoError()); // Clear any previous errors
+    dispatch(clearErrors()); // Clear any previous errors
     dispatch(fetchCryptos());
   }
 
   const renderErrorMessage = () => {
-    console.log('cryptoError:', cryptoError);
-console.log('exchangeRateError:', exchangeRateError);
-    if (cryptoError || exchangeRateError) {
+
+    if (errors.crypto || errors.exchangeRate) {
       return (
         <div className="mb-3">
-          {cryptoError && typeof cryptoError === 'string' && (
-            <Alert variant="danger">Error fetching cryptocurrencies: {cryptoError}</Alert>
+          {errors.crypto  && typeof errors.crypto === 'string' &&(
+            <Alert variant="danger">Error fetching cryptocurrencies: {errors.crypto}</Alert>
           )}
-          {exchangeRateError && typeof exchangeRateError === 'string' && (
-            <Alert variant="danger">Error fetching exchange rates: {exchangeRateError}</Alert>
+          {errors.exchangeRate && typeof errors.exchangeRate === 'string' && (
+            <Alert variant="danger">Error fetching exchange rates: {errors.exchangeRate}</Alert>
           )}
         </div>
       );
