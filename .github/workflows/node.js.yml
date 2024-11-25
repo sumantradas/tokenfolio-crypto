@@ -9,24 +9,29 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GH_TOKEN }}
+
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
-        
+
     - name: Install Dependencies
       run: npm ci
-      
+
     - name: Build Application
       env:
         REACT_APP_COINCAP_CRYPTO_URL: ${{ secrets.REACT_APP_COINCAP_CRYPTO_URL }}
       run: npm run build
-      
+
     - name: Deploy to GitHub Pages
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Automatically available for workflows
       run: |
         git config --global user.name 'GitHub Actions Bot'
         git config --global user.email 'deploy@github.com'
