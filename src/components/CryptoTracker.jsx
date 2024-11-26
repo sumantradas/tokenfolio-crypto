@@ -1,16 +1,15 @@
 import React, { useEffect, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, Card, Spinner, Button, Alert } from 'react-bootstrap';
-import { TrendingUp } from 'lucide-react';
+import { TrendingUp, RefreshCw } from 'lucide-react';
 import { fetchCryptos, fetchExchangeRates, clearErrors } from '../store/cryptoSlice';
 import SearchBarWithHistory from './SearchBarWithHistory';
 import { isEmptyObject } from '../utils/isEmptyObject';
 
 const CryptoList = lazy(() => import('./CryptoList'));
 
-
 const CryptoTracker = () => {
-  const { cryptos, status, lastFetched, exchangeRates, errors} = useSelector(state => state.crypto);
+  const { cryptos, status, lastFetched, exchangeRates, errors } = useSelector(state => state.crypto);
 
   const dispatch = useDispatch();
 
@@ -38,15 +37,18 @@ const CryptoTracker = () => {
   }
 
   const renderErrorMessage = () => {
-
     if (errors.crypto || errors.exchangeRate) {
       return (
-        <div className="mb-3">
-          {errors.crypto  && typeof errors.crypto === 'string' &&(
-            <Alert variant="danger">Error fetching cryptocurrencies: {errors.crypto}</Alert>
+        <div className="mb-3 space-y-2">
+          {errors.crypto && typeof errors.crypto === 'string' &&(
+            <Alert variant="danger" className="text-sm">
+              Error fetching cryptocurrencies: {errors.crypto}
+            </Alert>
           )}
           {errors.exchangeRate && typeof errors.exchangeRate === 'string' && (
-            <Alert variant="danger">Error fetching exchange rates: {errors.exchangeRate}</Alert>
+            <Alert variant="danger" className="text-sm">
+              Error fetching exchange rates: {errors.exchangeRate}
+            </Alert>
           )}
         </div>
       );
@@ -56,19 +58,35 @@ const CryptoTracker = () => {
   
 
   return (
-    <Container className="py-4">
-      <Card>
-        <Card.Header>
-          <div className="flex items-center gap-2 mb-0">
-            <TrendingUp />
-            <h4 className="mb-0">Token Folio</h4>
+    <Container className="py-2 sm:py-4 px-2 sm:px-4">
+      <Card className="w-full">
+        <Card.Header className="bg-gray-100 p-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-blue-600" />
+              <h4 className="text-lg font-semibold mb-0">Token Folio</h4>
+            </div>
+            <Button 
+              onClick={fetchDataCryptos} 
+              variant="outline-primary" 
+              className="flex items-center gap-2 p-2 text-sm"
+              disabled={status === 'loading'}
+            >
+              <RefreshCw className="w-4 h-4" />
+              <span className="hidden sm:inline">Refresh</span>
+            </Button>
           </div>
         </Card.Header>
-        <Card.Body>
-          <Suspense fallback={<Spinner animation="border" />}>
+        <Card.Body className="p-3 sm:p-4">
+          <Suspense fallback={
+            <div className="flex justify-center items-center h-40">
+              <Spinner animation="border" variant="primary" />
+            </div>
+          }>
             {renderErrorMessage()} 
-            <SearchBarWithHistory />
-            <Button onClick={fetchDataCryptos}>Refresh Data</Button>
+            <div className="mb-3">
+              <SearchBarWithHistory />
+            </div>
             <CryptoList />
           </Suspense>
         </Card.Body>
